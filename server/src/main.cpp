@@ -215,7 +215,7 @@ void rsf_received_data_cb(bt_socket_received_data_s *data, void *user_data) {
 	strncpy(buffer, data->data,len);
 	buffer[len] = '\0';
 	ALOGD("RemoteKeyFW: received a data!(%s)", buffer);
-	sprintf(cmdstr, "/bin/echo \"%s\" > /dev/virtual-sensor", buffer);
+	sprintf(cmdstr, "/bin/echo \"%s\" > /dev/virtual_sensor", buffer);
 	system(cmdstr);
 
 	// Sending ack is optional
