@@ -210,14 +210,25 @@ void rsf_received_data_cb(bt_socket_received_data_s *data, void *user_data) {
 	static char buffer[64];
 	char        cmdstr[1024] = "";
 	int len = data->data_size;
+	FILE *fd;
+	float r[3];
+#if 1
+	sscanf(data->data,"%f %f %f", &r[0],&r[1],&r[2]);
+	fd = fopen("/dev/virtual_sensor","w");
+
+	fprintf(fd, "%f %f %f",r[0],r[1],r[2]); 
+
+	fclose(fd);
 	
+	ALOGD("RemoteKeyFW: received a data!(%f %f %f)",r[0],r[1],r[2]);
+#else
 	if(len >= 64) len=63;
 	strncpy(buffer, data->data,len);
 	buffer[len] = '\0';
 	ALOGD("RemoteKeyFW: received a data!(%s)", buffer);
 	sprintf(cmdstr, "/bin/echo \"%s\" > /dev/virtual_sensor", buffer);
 	system(cmdstr);
-
+#endif
 	// Sending ack is optional
 	//char ack_string[]="ack rsf ";
 	//ack_string[strlen(ack_string)-1] = '0' + (gReceiveCount % 10);
